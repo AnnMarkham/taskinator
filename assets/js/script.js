@@ -1,35 +1,50 @@
 
-//--Form variables, querySelector and EventListener -- target entire form - not just button(use submit instead of click so that fucntion only runs at submit, not on every click.
-// on button element with type attribute with value submit, or press enter on keyboard = submit
 
-var formEl = document.querySelector("#task-form");
+var formEl = document.querySelector("#task-form")
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 
-var createTaskHandler = function (event) {
 
+var taskFormHandler = function (event) {
   event.preventDefault();
-
-
-  // .value indicates the property in which the input is stored ---  figured out where this is by typing console.dir on the line after the var taskNameInput -to see where entered text went(note before added .class to end of var )
+  //console.log(event);
 
   var taskNameInput = document.querySelector("input[name='task-name']").value;
   var taskTypeInput = document.querySelector("select[name='task-type']").value;
 
-  // create list item
+  if (!taskNameInput || !taskTypeInput) {
+    alert("Need to fill out the task form")
+    return false;
+  }
+
+  formEl.reset();
+
+  // package up data as an object
+  var dataObj = {
+    name: taskNameInput,
+    type: taskTypeInput
+  };
+
+  // send it as an argument to create task El
+  createTaskEl(dataObj);
+}
+
+var createTaskEl = function (dataObj) {
+  // build a list item 
   var listItemEl = document.createElement("li");
   listItemEl.className = "task-item";
 
-  //create div to hold task info and add to list item
+  //put the content in div
   var taskInfoEl = document.createElement("div");
-  //give it a class name
   taskInfoEl.className = "task-info";
-  //add HTML content to div
-  taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskNameInput + "</h3><span class='task-type'>" + taskTypeInput + "</span>";
+  taskInfoEl.innerHTML = "<h3 class='task-name'>" + dataObj.name + "</h3><span class='task-type'>" + dataObj.type + "</span>";
 
+  // put the package in the li item
   listItemEl.appendChild(taskInfoEl);
 
-  // add entire list item to list
-  tasksToDoEl.appendChild(listItemEl);
-};
 
-formEl.addEventListener("submit", createTaskHandler);
+  // add the whole schabang as a child
+  tasksToDoEl.appendChild(listItemEl);
+}
+
+
+formEl.addEventListener("submit", taskFormHandler);
