@@ -27,11 +27,13 @@ var taskFormHandler = function (event) {
 
   formEl.reset();
 
-  //send to argument to create task
+  //has data attibute, so get task id and call function to complete edit process
   if (isEdit) {
     var taskId = formEl.getAttribute("data-task-id");
     comletedEditTask(taskNameInput, taskTypeInput, taskId);
-  } else {
+  }
+  //no dat attribute, so create object as normal and pass to createTaskEl function
+  else {
     // package up data as an object
     var taskDataObj = {
       name: taskNameInput,
@@ -43,20 +45,21 @@ var taskFormHandler = function (event) {
   }
 
 }
-
-
-
 var completedEditTask = function (taskName, taskType, taskId) {
-  // find list item with task id
+  console.log(taskName, taskType, taskId);
+
+  // find the matching task list item with task id
   var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
 
 
-  // set values from the form in the header
+  // set new values from the form in the header
   taskSelected.querySelector("h3.task-name").textContent = taskName
   taskSelected.querySelector("span.task-type").textContent = taskType;
 
-  window.alert("task " + faskId + "Updated!");
+  alert("Task Updated!");
 
+
+  //Reset the form
   formEl.removeAttribute("task-data-id");
   document.querySelector("#save-task").textContent = "Add Task";
 };
@@ -183,26 +186,29 @@ var deleteTask = function (taskId) {
   taskSelected.remove();
 }
 
-
 var taskStatusChangeHandler = function (event) {
-  console.log("youve ghchaaainged -man")
-  console.log(event.target);
+  // get the task item's id
   var taskId = event.target.getAttribute("data-task-id");
+  console.log(event.target)
+
+  // get the currently selected option's value and convert to lowercase
   var statusValue = event.target.value.toLowerCase();
+
+  // find the parent task item element based on the id
   var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
 
-  if (statusValue === "to do") {
+  if (statusValue === "To Do") {
     tasksToDoEl.appendChild(taskSelected);
   }
-  else if (statusValue === "in progress") {
+  else if (statusValue === "In progress") {
     tasksInProgressEl.appendChild(taskSelected);
   }
-  else if (statusValue === "completed") {
+  else if (statusValue === "Completed") {
     tasksCompletedEl.appendChild(taskSelected);
   }
 
-
 };
+
 
 formEl.addEventListener("submit", taskFormHandler);
 
