@@ -65,6 +65,7 @@ var completedEditTask = function (taskName, taskType, taskId) {
       tasks[i].name = taskName;
       tasks[i].type = taskType;
     }
+    saveTasks();
   }
 
   alert("Task Updated!");
@@ -104,6 +105,8 @@ var createTaskEl = function (taskDataObj) {
   taskDataObj.id = taskIdCounter;
 
   tasks.push(taskDataObj);
+
+  saveTasks();
 
   var pushedArr = [1, 2, 3];
 
@@ -227,6 +230,7 @@ var deleteTask = function (taskId) {
   //reassign tasks array to be the same as updatedTaskArr
   tasks = updatedTaskArr;
 
+  saveTasks();
 
 }
 
@@ -256,6 +260,7 @@ var taskStatusChangeHandler = function (event) {
     if (tasks[i].id === parseInt(taskId)) {
       tasks[i].status = status.Value;
     }
+    saveTasks();
   }
 
 };
@@ -311,9 +316,7 @@ var dropTaskHandler = function (event) {
       tasks[i].status = statusSelectEl.value.toLowerCase();
     }
   }
-
-  console.log(tasks);
-
+  saveTasks();
 };
 
 var dragLeaveHandler = function (event) {
@@ -323,25 +326,9 @@ var dragLeaveHandler = function (event) {
   }
 }
 
-// var tasks=[
-//   {id:1,
-//   name:"Add localStorage persistence",
-// type: "Web",
-// status:"in progress"
-// },
-// {
-//   id: 2,
-// name:"Learn JavaScript",
-// type: "Web",
-// status: "in progress"
-// },
-// {
-//   id: 3,
-//   name: "Refactor code",
-//   type: "Web",
-//   status: "to do"
-// }
-// ];
+var saveTasks = function () {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
 formEl.addEventListener("submit", taskFormHandler);
 
